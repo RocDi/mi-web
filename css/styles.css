@@ -61,10 +61,22 @@ header {
     background-color: #2563eb;
     color: #fff;
     padding: 12px 24px;
-    border-radius: 200px;
+    border-radius: 8px;
     text-decoration: none;
 }
 
 .boton:hover {
     background-color: #1d3ed8;
+}
+
+@media (max-width: 600px) {
+    nav ul {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    section {
+        padding: 50px 16px;
+    }
 }
