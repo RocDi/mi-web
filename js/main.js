@@ -4,5 +4,32 @@ async function cargar(id, archivo) {
     document.getElementById(id).innerHTML = html;
 }
 
-cargar("header", "componentes/header.html");
-cargar("footer", "componentes/footer.html");
+function activarModoOscuro() {
+  const boton = document.getElementById("tema");
+  const html = document.documentElement;
+
+  if (localStorage.getItem("tema") === "oscuro") {
+    html.setAttribute("data-tema", "oscuro");
+    boton.textContent = "☀️"
+  }
+
+  boton.addEventListener("click", () => {
+    if (html.getAttribute("data-tema") === "oscuro") {
+      html.removeAttribute("data-tema");
+      localStorage.setItem("tema", "claro");
+      boton.textContent = "🌙"
+    } else {
+      html.setAttribute("data-tema", "oscuro");
+      localStorage.setItem("tema", "oscuro");
+      boton.textContent = "☀️"
+    }
+  });
+}
+
+async function iniciar() {
+  await cargar("header", "componentes/header.html");
+  await cargar("footer", "componentes/footer.html");
+  activarModoOscuro();
+}
+
+iniciar();

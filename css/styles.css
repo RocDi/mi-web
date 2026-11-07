@@ -10,6 +10,7 @@
     --color-texto: #222222;
     --color-fondo: #f9f9f9;
     --color-borde: #e5e5e5;
+    --color-tarjeta: #ffffff;
 }
 body {
     font-family: Arial, sans-serif;
@@ -20,6 +21,7 @@ body {
 
 nav ul {
     display: flex;
+    align-items: center;
     gap: 20px;
     list-style: none;
     padding: 20px;
@@ -102,7 +104,7 @@ header {
 }
 
 .tarjeta {
-    background-color: #fff;
+    background-color: var(--color-tarjeta);
     border: 1px solid var(--color-borde);
     border-radius: 12px;
     padding: 20px;
@@ -122,4 +124,34 @@ footer {
     border-top: 1px solid var(--color-borde);
     color: #666161;
     font-size: 0.9rem;
+}
+
+[data-tema="oscuro"] {
+    --color-menu: #1a1a1a;
+    --color-texto: #eeeeee;
+    --color-fondo: #3b3b3b;
+    --color-borde: #333333;
+    --color-tarjeta: #1c1c1c;
+}
+
+#tema {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    padding: 0;
+    cursor: pointer;
+}
+
+nav li {
+    display: flex;
+    align-items: center;
+}
+
+#tema:hover {
+    background-color: #f3f2f3;
+    border-radius: 10%;
+}
+
+[data-tema="oscuro"] #tema:hover {
+    background-color: #4b4b4b;
 }
