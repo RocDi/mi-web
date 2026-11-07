@@ -98,3 +98,15 @@ header {
 .tarjeta:hover {
     border-color: #2563eb;
 }
+
+section a {
+    color: #2563eb;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 1px solid #e5e5e5;
+    color: #f80000;
+    font-size: 0.9rem;
+}
