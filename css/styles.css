@@ -20,12 +20,22 @@ body {
 }
 
 nav ul {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    list-style: none;
-    padding: 20px;
-    margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  list-style: none;
+  padding: 20px;
+  margin: 0;
+}
+
+#menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  padding: 12px 20px;
+  cursor: pointer;
+  color: var(--color-texto);
 }
 
 nav a {
@@ -61,12 +71,12 @@ header {
     position: sticky;
     top: 0;
     z-index: 10;
-}´
+}
 
 #inicio {
     min-height: 80vh;
     display: flex;
-    flex-direction: colum;
+    flex-direction: column;
     justify-content: center;
 }
 
@@ -81,20 +91,9 @@ header {
 }
 
 .boton:hover {
-    background-color: #1d3ed8;
+    background-color: var(--color-acento-oscuro);
 }
 
-@media (max-width: 600px) {
-    nav ul {
-        flex-wrap: wrap;
-        gap: 12px;
-        padding: 12px;
-    }
-
-    section {
-        padding: 50px 16px;
-    }
-}
 
 .tarjetas {
     display: grid;
@@ -154,4 +153,41 @@ nav li {
 
 [data-tema="oscuro"] #tema:hover {
     background-color: #4b4b4b;
+}
+
+nav a.activo {
+  color: var(--color-acento);
+  font-weight: bold;
+  border-bottom: 2px solid var(--color-acento);
+  padding-bottom: 2px;
+}
+
+   nav li:last-child {
+     margin-left: auto;
+   }
+
+@media (max-width: 800px) {
+    #menu-btn {
+        display: block;
+  }
+
+  nav ul {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0 20px 16px;
+  }
+
+  nav ul.abierto {
+    display: flex;
+  }
+
+  nav li:last-child {
+    margin-left: 0;
+  }
+
+    section {
+        padding: 50px 16px;
+    }
 }

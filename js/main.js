@@ -1,7 +1,7 @@
 async function cargar(id, archivo) {
-    const respuesta = await fetch(archivo);
-    const html = await respuesta.text();
-    document.getElementById(id).innerHTML = html;
+  const respuesta = await fetch(archivo);
+  const html = await respuesta.text();
+  document.getElementById(id).innerHTML = html;
 }
 
 function activarModoOscuro() {
@@ -10,19 +10,39 @@ function activarModoOscuro() {
 
   if (localStorage.getItem("tema") === "oscuro") {
     html.setAttribute("data-tema", "oscuro");
-    boton.textContent = "☀️"
+    boton.textContent = "☀️";
   }
 
   boton.addEventListener("click", () => {
     if (html.getAttribute("data-tema") === "oscuro") {
       html.removeAttribute("data-tema");
       localStorage.setItem("tema", "claro");
-      boton.textContent = "🌙"
+      boton.textContent = "🌙";
     } else {
       html.setAttribute("data-tema", "oscuro");
       localStorage.setItem("tema", "oscuro");
-      boton.textContent = "☀️"
+      boton.textContent = "☀️";
     }
+  });
+}
+
+function marcarPaginaActual() {
+  const actual = location.pathname.split("/").pop() || "index.html";
+  const enlaces = document.querySelectorAll("nav a");
+
+  enlaces.forEach((enlace) => {
+    if (enlace.getAttribute("href") === actual) {
+      enlace.classList.add("activo");
+    }
+  });
+}
+
+function activarMenuMovil() {
+  const boton = document.getElementById("menu-btn");
+  const lista = document.querySelector("nav ul");
+
+  boton.addEventListener("click", () => {
+    lista.classList.toggle("abierto");
   });
 }
 
@@ -30,6 +50,8 @@ async function iniciar() {
   await cargar("header", "componentes/header.html");
   await cargar("footer", "componentes/footer.html");
   activarModoOscuro();
+  marcarPaginaActual();
+  activarMenuMovil();
 }
 
 iniciar();
