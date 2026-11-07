@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="header"></div>
+
+  <main>
+    <section>
+      <h1>Panel de admin</h1>
+      <form id="form-proyecto">
+        <label>Título
+          <input type="text" id="titulo" required>
+        </label>
+        <label>Descripción
+          <textarea id="descripcion" rows="4" required></textarea>
+        </label>
+        <label>Enlace (opcional)
+          <input type="url" id="enlace">
+        </label>
+        <button type="submit" class="boton">Crear proyecto</button>
+        <p id="mensaje"></p>
+      </form>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

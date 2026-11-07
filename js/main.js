@@ -46,12 +46,29 @@ function activarMenuMovil() {
   });
 }
 
+async function actualizarSesion() {
+  const enlace = document.getElementById("enlace-sesion");
+  const { data } = await db.auth.getSession();
+
+  if (data.session) {
+    document.getElementById("li-admin").hidden = false;
+    enlace.textContent = "Cerrar sesión";
+    enlace.href = "#";
+    enlace.addEventListener("click", async (evento) => {
+      evento.preventDefault();
+      await db.auth.signOut();
+      location.href = "index.html";
+    });
+  }
+}
+
 async function iniciar() {
   await cargar("header", "componentes/header.html");
   await cargar("footer", "componentes/footer.html");
   activarModoOscuro();
   marcarPaginaActual();
   activarMenuMovil();
+  actualizarSesion();
 }
 
 iniciar();
