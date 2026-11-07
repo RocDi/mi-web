@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 #header,
 #footer {
   display: contents;
@@ -13,7 +14,7 @@
     --color-tarjeta: #ffffff;
 }
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Inter", Arial, sans-serif;
     margin: 0;
     color: var(--color-texto);
     background-color: var(--color-fondo);
@@ -252,4 +253,17 @@ form .boton {
 .boton-peligro:hover {
   background-color: #dc2626;
   color: #fff;
+}
+
+.tarjeta a {
+  display: inline-block;
+  margin-top: 12px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-acento);
+  outline-offset: 2px;
 }

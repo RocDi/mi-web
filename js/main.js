@@ -33,6 +33,7 @@ function marcarPaginaActual() {
   enlaces.forEach((enlace) => {
     if (enlace.getAttribute("href") === actual) {
       enlace.classList.add("activo");
+      enlace.setAttribute("aria-current", "page");
     }
   });
 }
@@ -62,7 +63,16 @@ async function actualizarSesion() {
   }
 }
 
+function ponerFavicon() {
+  const icono = document.createElement("link");
+  icono.rel = "icon";
+  icono.href =
+    "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>";
+  document.head.append(icono);
+}
+
 async function iniciar() {
+  ponerFavicon();
   await cargar("header", "componentes/header.html");
   await cargar("footer", "componentes/footer.html");
   activarModoOscuro();

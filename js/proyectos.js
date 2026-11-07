@@ -23,6 +23,14 @@ async function mostrarProyectos() {
     descripcion.textContent = proyecto.descripcion;
 
     tarjeta.append(titulo, descripcion);
+        if (proyecto.enlace && proyecto.enlace.startsWith("http")) {
+      const enlace = document.createElement("a");
+      enlace.href = proyecto.enlace;
+      enlace.textContent = "Ver proyecto";
+      enlace.target = "_blank";
+      enlace.rel = "noopener noreferrer";
+      tarjeta.append(enlace);
+    }
     contenedor.append(tarjeta);
   });
 }
