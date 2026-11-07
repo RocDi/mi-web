@@ -13,6 +13,7 @@
     <section>
       <h1>Panel de admin</h1>
       <form id="form-proyecto">
+        <h2 id="titulo-form">Nuevo proyecto</h2>
         <label>Título
           <input type="text" id="titulo" required>
         </label>
@@ -22,10 +23,14 @@
         <label>Enlace (opcional)
           <input type="url" id="enlace">
         </label>
-        <button type="submit" class="boton">Crear proyecto</button>
-        <p id="mensaje"></p>
+        <button type="submit" class="boton" id="btn-guardar">Crear proyecto</button>
+        <button type="button" class="boton-secundario" id="btn-cancelar" hidden>Cancelar edición</button>
       </form>
     </section>
+    <section>
+  <h2>Mis proyectos</h2>
+  <div class="tarjetas" id="lista-admin"></div>
+</section>
   </main>
 
   <div id="footer"></div>

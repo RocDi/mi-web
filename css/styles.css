@@ -222,3 +222,34 @@ form .boton {
 [hidden] {
   display: none !important;
 }
+
+.acciones {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.boton-secundario,
+.boton-peligro {
+  background: none;
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.boton-secundario:hover {
+  border-color: var(--color-acento);
+}
+
+.boton-peligro {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+.boton-peligro:hover {
+  background-color: #dc2626;
+  color: #fff;
+}
