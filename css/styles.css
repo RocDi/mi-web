@@ -1,8 +1,16 @@
+:root {
+    --color-acento: #2563eb;
+    --color-acento-oscuro: #1d4ed8;
+    --color-menu: #ffffff;
+    --color-texto: #222222;
+    --color-fondo: #f9f9f9;
+    --color-borde: #e5e5e5;
+}
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    color: #222;
-    background-color: #f9f9f9;
+    color: var(--color-texto);
+    background-color: var(--color-fondo);
 }
 
 nav ul {
@@ -15,16 +23,16 @@ nav ul {
 
 nav a {
     text-decoration: none;
-    color: #222;
+    color: var(--color-texto);
 }
 
 header {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e5e5;
+    background-color: var(--color-menu);
+    border-bottom: 1px solid var(--color-borde);
 }
 
 nav a:hover {
-    color: #2563eb;
+    color: var(--color-acento);
 }
 
 section {
@@ -34,7 +42,7 @@ section {
 }
 
 h1, h2 {
-    color: #2563eb;
+    color: var(--color-acento);
 }
 
 html {
@@ -58,7 +66,7 @@ header {
 .boton {
     display: inline-block;
     width: fit-content;
-    background-color: #2563eb;
+    background-color: var(--color-acento);
     color: #fff;
     padding: 12px 24px;
     border-radius: 8px;
@@ -90,23 +98,23 @@ header {
 
 .tarjeta {
     background-color: #fff;
-    border: 1px solid #e5e5e5;
+    border: 1px solid var(--color-borde);
     border-radius: 12px;
     padding: 20px;
 }
 
 .tarjeta:hover {
-    border-color: #2563eb;
+    border-color: var(--color-acento);
 }
 
 section a {
-    color: #2563eb;
+    color: var(--color-acento);
 }
 
 footer {
     text-align: center;
     padding: 30px 20px;
-    border-top: 1px solid #e5e5e5;
-    color: #f80000;
+    border-top: 1px solid var(--color-borde);
+    color: #666161;
     font-size: 0.9rem;
 }
