@@ -163,9 +163,9 @@ nav a.activo {
   padding-bottom: 2px;
 }
 
-   nav li:last-child {
-     margin-left: auto;
-   }
+   #li-sesion {
+  margin-left: auto;
+}
 
 @media (max-width: 800px) {
     #menu-btn {
@@ -184,7 +184,7 @@ nav a.activo {
     display: flex;
   }
 
-  nav li:last-child {
+    #li-sesion {
     margin-left: 0;
   }
 
@@ -266,4 +266,17 @@ input:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--color-acento);
   outline-offset: 2px;
+}
+
+#enlace-sesion {
+  background-color: var(--color-acento);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border-bottom: none;
+}
+
+#enlace-sesion:hover {
+  background-color: var(--color-acento-oscuro);
+  color: #fff;
 }
