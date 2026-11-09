@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear cuenta</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="header"></div>
+
+  <main>
+    <section>
+      <h1>Crear cuenta</h1>
+      <form id="form-registro">
+        <label>Correo
+          <input type="email" id="correo" required>
+        </label>
+        <label>Contraseña (mínimo 8 caracteres)
+          <input type="password" id="clave" minlength="8" required>
+        </label>
+        <label>Repite la contraseña
+          <input type="password" id="clave2" minlength="8" required>
+        </label>
+        <button type="submit" class="boton">Crear cuenta</button>
+        <p id="mensaje"></p>
+      </form>
+      <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/registro.js"></script>
+</body>
+</html>
