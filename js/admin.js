@@ -95,6 +95,8 @@ async function iniciarAdmin() {
     btnCancelar.addEventListener("click", salirEdicion);
   formulario.addEventListener("submit", async (evento) => {
     evento.preventDefault();
+        console.log("submit recibido");
+        btnGuardar.disabled = true;
 
     const proyecto = {
       titulo: document.getElementById("titulo").value,
@@ -111,6 +113,7 @@ async function iniciarAdmin() {
     } else {
       ({ error } = await db.from("proyectos").insert(proyecto));
     }
+        btnGuardar.disabled = false;
 
     if (error) {
       mensaje.textContent = "No se pudo guardar el proyecto.";
