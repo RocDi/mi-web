@@ -87,7 +87,7 @@ async function cargarLista() {
 
 async function iniciarAdmin() {
   const { data } = await db.auth.getSession();
-  if (!data.session) {
+    if (!data.session || data.session.user.id !== ADMIN_ID) {
     location.href = "login.html";
     return;
   }

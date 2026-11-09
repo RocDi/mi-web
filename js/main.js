@@ -52,7 +52,9 @@ async function actualizarSesion() {
   const { data } = await db.auth.getSession();
 
   if (data.session) {
-    document.getElementById("li-admin").hidden = false;
+        if (data.session.user.id === ADMIN_ID) {
+      document.getElementById("li-admin").hidden = false;
+    }
     enlace.textContent = "Cerrar sesión";
     enlace.href = "#";
     enlace.addEventListener("click", async (evento) => {

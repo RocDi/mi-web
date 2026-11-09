@@ -19,4 +19,6 @@ formulario.addEventListener("submit", async (evento) => {
   }
 
   mensaje.textContent = "¡Sesión iniciada!";
+    const { data } = await db.auth.getUser();
+  location.href = data.user.id === ADMIN_ID ? "admin.html" : "index.html";
 });
