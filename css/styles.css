@@ -347,3 +347,8 @@ main section {
   border-radius: 8px;
   margin-bottom: 12px;
 }
+
+[data-tema="oscuro"] .tarjeta:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border-color: var(--color-acento);
+}
