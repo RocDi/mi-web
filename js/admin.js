@@ -56,9 +56,12 @@ async function cargarLista() {
   data.forEach((proyecto) => {
     const tarjeta = document.createElement("article");
     tarjeta.classList.add("tarjeta");
+        if (!proyecto.visible) tarjeta.classList.add("oculta");
 
     const titulo = document.createElement("h3");
-    titulo.textContent = proyecto.titulo;
+        titulo.textContent = proyecto.visible
+      ? proyecto.titulo
+      : proyecto.titulo + " (oculto)";
 
     const descripcion = document.createElement("p");
     descripcion.textContent = proyecto.descripcion;
@@ -92,7 +95,24 @@ async function cargarLista() {
     });
       filtrarLista();
 
-    acciones.append(btnEditar, btnBorrar);
+          const btnVisible = document.createElement("button");
+    btnVisible.textContent = proyecto.visible ? "Ocultar" : "Mostrar";
+    btnVisible.classList.add("boton-secundario");
+    btnVisible.addEventListener("click", async () => {
+      const { error } = await db
+        .from("proyectos")
+        .update({ visible: !proyecto.visible })
+        .eq("id", proyecto.id);
+
+      if (error) {
+        mensaje.textContent = "No se pudo cambiar la visibilidad.";
+        console.error(error);
+        return;
+      }
+
+      cargarLista();
+    });
+        acciones.append(btnEditar, btnVisible, btnBorrar);
     tarjeta.append(titulo, descripcion, acciones);
     contenedor.append(tarjeta);
   });
