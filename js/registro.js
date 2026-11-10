@@ -7,6 +7,13 @@ formulario.addEventListener("submit", async (evento) => {
   const correo = document.getElementById("correo").value;
   const clave = document.getElementById("clave").value;
   const clave2 = document.getElementById("clave2").value;
+    const nombre = document.getElementById("nombre").value.trim();
+  const apellidos = document.getElementById("apellidos").value.trim();
+
+  if (!nombre || !apellidos) {
+    mensaje.textContent = "Escribe tu nombre y tus apellidos.";
+    return;
+  }
 
   if (clave !== clave2) {
     mensaje.textContent = "Las contraseñas no coinciden.";
@@ -16,8 +23,9 @@ formulario.addEventListener("submit", async (evento) => {
   const { error } = await db.auth.signUp({
     email: correo,
     password: clave,
-    options: {
+        options: {
       emailRedirectTo: new URL("login.html", location.href).href,
+      data: { nombre, apellidos },
     },
   });
 
