@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nueva contraseña</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="header"></div>
+
+  <main>
+    <section>
+      <h1>Nueva contraseña</h1>
+      <form id="form-restablecer" hidden>
+        <label>Nueva contraseña (mínimo 8 caracteres)
+          <input type="password" id="clave" minlength="8" autocomplete="new-password" required>
+        </label>
+        <label>Repite la contraseña
+          <input type="password" id="clave2" minlength="8" autocomplete="new-password" required>
+        </label>
+        <button type="submit" class="boton">Guardar contraseña</button>
+      </form>
+      <p id="mensaje"></p>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/restablecer.js"></script>
+</body>
+</html>
