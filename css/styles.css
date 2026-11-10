@@ -471,6 +471,7 @@ nav .desplegable a::after {
   border-radius: 12px;
   padding: 20px;
   margin-top: 24px;
+    max-width: 480px;
 }
 
 .ajuste h2 {
