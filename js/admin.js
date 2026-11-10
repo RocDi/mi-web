@@ -5,9 +5,38 @@ const btnGuardar = document.getElementById("btn-guardar");
 const btnCancelar = document.getElementById("btn-cancelar");
 
 let idEditando = null;
+let imagenActual = null;
+
+const TIPOS_IMAGEN = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
+
+async function subirImagen(archivo) {
+  const extension = TIPOS_IMAGEN[archivo.type];
+  if (!extension) {
+    return { error: "Solo se admiten imágenes JPG, PNG o WebP." };
+  }
+  if (archivo.size > 2 * 1024 * 1024) {
+    return { error: "La imagen pesa más de 2 MB." };
+  }
+
+  const ruta = crypto.randomUUID() + "." + extension;
+  const { error } = await db.storage.from("imagenes").upload(ruta, archivo);
+
+  if (error) {
+    console.error(error);
+    return { error: "No se pudo subir la imagen." };
+  }
+
+  const { data } = db.storage.from("imagenes").getPublicUrl(ruta);
+  return { url: data.publicUrl };
+}
 
 function salirEdicion() {
   idEditando = null;
+    imagenActual = null;
   formulario.reset();
   tituloForm.textContent = "Nuevo proyecto";
   btnGuardar.textContent = "Crear proyecto";
@@ -16,6 +45,7 @@ function salirEdicion() {
 
 function empezarEdicion(proyecto) {
   idEditando = proyecto.id;
+    imagenActual = proyecto.imagen || null;
   document.getElementById("titulo").value = proyecto.titulo;
   document.getElementById("descripcion").value = proyecto.descripcion;
   document.getElementById("enlace").value = proyecto.enlace || "";
@@ -168,11 +198,24 @@ async function iniciarAdmin() {
   formulario.addEventListener("submit", async (evento) => {
     evento.preventDefault();
         btnGuardar.disabled = true;
+            const archivo = document.getElementById("imagen").files[0];
+    let imagen = imagenActual;
+
+    if (archivo) {
+      const resultado = await subirImagen(archivo);
+      if (resultado.error) {
+        mensaje.textContent = resultado.error;
+        btnGuardar.disabled = false;
+        return;
+      }
+      imagen = resultado.url;
+    }
 
     const proyecto = {
       titulo: document.getElementById("titulo").value,
       descripcion: document.getElementById("descripcion").value,
       enlace: document.getElementById("enlace").value || null,
+            imagen: imagen,
     };
 
         let error;
