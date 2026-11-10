@@ -49,20 +49,36 @@ function activarMenuMovil() {
 
 async function actualizarSesion() {
   const enlace = document.getElementById("enlace-sesion");
+  const caja = document.getElementById("li-sesion");
   const { data } = await db.auth.getSession();
 
-  if (data.session) {
-        if (data.session.user.id === ADMIN_ID) {
-      document.getElementById("li-admin").hidden = false;
-    }
-    enlace.textContent = "Cerrar sesión";
-    enlace.href = "#";
-    enlace.addEventListener("click", async (evento) => {
-      evento.preventDefault();
-      await db.auth.signOut();
-      location.href = "index.html";
-    });
+  if (!data.session) return;
+
+  const usuario = data.session.user;
+  const nombre = usuario.user_metadata?.nombre || usuario.email.split("@")[0];
+
+  caja.classList.add("con-sesion");
+  enlace.textContent = nombre;
+  enlace.href = "#";
+
+  if (usuario.id === ADMIN_ID) {
+    document.getElementById("enlace-admin").hidden = false;
   }
+
+  enlace.addEventListener("click", (evento) => {
+    evento.preventDefault();
+    caja.classList.toggle("abierto");
+  });
+
+  document.addEventListener("click", (evento) => {
+    if (!caja.contains(evento.target)) caja.classList.remove("abierto");
+  });
+
+  document.getElementById("cerrar-sesion").addEventListener("click", async (evento) => {
+    evento.preventDefault();
+    await db.auth.signOut();
+    location.href = "index.html";
+  });
 }
 
 function ponerFavicon() {

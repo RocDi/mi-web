@@ -168,6 +168,11 @@ nav a.activo {
 @media (max-width: 800px) {
     #menu-btn {
         display: block;
+          .desplegable {
+    position: static;
+    box-shadow: none;
+    margin-top: 8px;
+  }
   }
 
   nav ul {
@@ -397,4 +402,96 @@ nav a.activo:not(#enlace-sesion)::after {
 
 header {
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+#li-sesion {
+  position: relative;
+}
+
+#enlace-sesion {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desplegable {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 200px;
+  padding: 8px;
+  background-color: var(--color-tarjeta);
+  border: 1px solid var(--color-borde);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 20;
+}
+
+#li-sesion.con-sesion:hover .desplegable,
+#li-sesion.abierto .desplegable {
+  display: block;
+}
+
+.desplegable a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--color-texto);
+}
+
+.desplegable a:hover {
+  background-color: var(--color-borde);
+  color: var(--color-texto);
+}
+
+nav .desplegable a::after {
+  display: none !important;
+}
+
+.desplegable hr {
+  border: none;
+  border-top: 1px solid var(--color-borde);
+  margin: 6px 0;
+}
+
+.desplegable #cerrar-sesion,
+.desplegable #cerrar-sesion:hover {
+  color: #dc2626;
+}
+
+.desplegable #cerrar-sesion:hover {
+  background-color: rgba(220, 38, 38, 0.12);
+}
+
+.ajuste {
+  background-color: var(--color-tarjeta);
+  border: 1px solid var(--color-borde);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.ajuste h2 {
+  margin-top: 0;
+}
+
+.opciones-tema {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opciones-tema label {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  padding: 0;
+  width: auto;
+  accent-color: var(--color-acento);
 }
