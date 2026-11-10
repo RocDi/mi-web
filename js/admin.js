@@ -112,6 +112,13 @@ async function cargarLista() {
     const tarjeta = document.createElement("article");
     tarjeta.classList.add("tarjeta");
         if (!proyecto.visible) tarjeta.classList.add("oculta");
+            if (proyecto.imagen && proyecto.imagen.startsWith("https://")) {
+      const imagen = document.createElement("img");
+      imagen.src = proyecto.imagen;
+      imagen.alt = proyecto.titulo;
+      imagen.loading = "lazy";
+      tarjeta.append(imagen);
+    }
 
     const titulo = document.createElement("h3");
         titulo.textContent = proyecto.visible
