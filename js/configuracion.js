@@ -64,6 +64,45 @@ async function iniciarConfiguracion() {
       "Te hemos enviado un correo para confirmar el cambio. Hasta que lo confirmes, seguirás usando el correo actual.";
   });
 
+    // Contraseña
+  document.getElementById("form-clave").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const mensaje = document.getElementById("mensaje-clave");
+    const actual = document.getElementById("clave-actual").value;
+    const nueva = document.getElementById("clave-nueva").value;
+    const nueva2 = document.getElementById("clave-nueva2").value;
+
+    if (nueva !== nueva2) {
+      mensaje.textContent = "Las contraseñas nuevas no coinciden.";
+      return;
+    }
+
+    if (nueva === actual) {
+      mensaje.textContent = "La nueva contraseña debe ser distinta de la actual.";
+      return;
+    }
+
+    const comprobacion = await db.auth.signInWithPassword({
+      email: usuario.email,
+      password: actual,
+    });
+
+    if (comprobacion.error) {
+      mensaje.textContent = "La contraseña actual no es correcta.";
+      return;
+    }
+
+    const { error } = await db.auth.updateUser({ password: nueva });
+
+    if (error) {
+      mensaje.textContent = "No se pudo cambiar la contraseña. Prueba con otra más segura.";
+      console.error(error);
+      return;
+    }
+
+    document.getElementById("form-clave").reset();
+    mensaje.textContent = "Contraseña cambiada.";
+  });
   // Aspecto
   const guardado = localStorage.getItem("tema") || "sistema";
 

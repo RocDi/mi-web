@@ -42,6 +42,20 @@
         <button type="submit" class="boton">Cambiar correo</button>
         <p id="mensaje-correo"></p>
       </form>
+            <form id="form-clave" class="ajuste">
+        <h2>Contraseña</h2>
+        <label>Contraseña actual
+          <input type="password" id="clave-actual" autocomplete="current-password" required>
+        </label>
+        <label>Nueva contraseña (mínimo 8 caracteres)
+          <input type="password" id="clave-nueva" minlength="8" autocomplete="new-password" required>
+        </label>
+        <label>Repite la nueva contraseña
+          <input type="password" id="clave-nueva2" minlength="8" autocomplete="new-password" required>
+        </label>
+        <button type="submit" class="boton">Cambiar contraseña</button>
+        <p id="mensaje-clave"></p>
+      </form>
     </section>
   </main>
 
