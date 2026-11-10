@@ -4,26 +4,39 @@ async function cargar(id, archivo) {
   document.getElementById(id).innerHTML = html;
 }
 
+function actualizarIconoTema() {
+  const boton = document.getElementById("tema");
+  if (!boton) return;
+  const oscuro = document.documentElement.getAttribute("data-tema") === "oscuro";
+  boton.textContent = oscuro ? "☀️" : "🌙";
+}
+
+function aplicarTema() {
+  const guardado = localStorage.getItem("tema") || "sistema";
+  const sistemaOscuro = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const oscuro = guardado === "oscuro" || (guardado === "sistema" && sistemaOscuro);
+
+  if (oscuro) {
+    document.documentElement.setAttribute("data-tema", "oscuro");
+  } else {
+    document.documentElement.removeAttribute("data-tema");
+  }
+  actualizarIconoTema();
+}
+
 function activarModoOscuro() {
   const boton = document.getElementById("tema");
-  const html = document.documentElement;
-
-  if (localStorage.getItem("tema") === "oscuro") {
-    html.setAttribute("data-tema", "oscuro");
-    boton.textContent = "☀️";
-  }
+  actualizarIconoTema();
 
   boton.addEventListener("click", () => {
-    if (html.getAttribute("data-tema") === "oscuro") {
-      html.removeAttribute("data-tema");
-      localStorage.setItem("tema", "claro");
-      boton.textContent = "🌙";
-    } else {
-      html.setAttribute("data-tema", "oscuro");
-      localStorage.setItem("tema", "oscuro");
-      boton.textContent = "☀️";
-    }
+    const oscuro = document.documentElement.getAttribute("data-tema") === "oscuro";
+    localStorage.setItem("tema", oscuro ? "claro" : "oscuro");
+    aplicarTema();
   });
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", aplicarTema);
 }
 
 function marcarPaginaActual() {
@@ -98,5 +111,5 @@ async function iniciar() {
   activarMenuMovil();
   actualizarSesion();
 }
-
+aplicarTema();
 iniciar();
