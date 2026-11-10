@@ -4,6 +4,7 @@ async function mostrarProyectos() {
   const { data, error } = await db
     .from("proyectos")
     .select("*")
+        .order("orden", { ascending: true })
     .order("created_at", { ascending: false });
 
   if (error) {

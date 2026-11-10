@@ -334,3 +334,8 @@ main section {
   opacity: 0.5;
   border-style: dashed;
 }
+
+.boton-secundario:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -38,6 +38,30 @@ function filtrarLista() {
     const visibles = document.querySelectorAll("#lista-admin .tarjeta:not([hidden])").length;
   document.getElementById("sin-resultados").hidden = visibles > 0;
 }
+async function mover(lista, posicion, direccion) {
+  const nueva = posicion + direccion;
+  if (nueva < 0 || nueva >= lista.length) return;
+
+  const copia = [...lista];
+  [copia[posicion], copia[nueva]] = [copia[nueva], copia[posicion]];
+
+  const cambios = copia
+    .map((p, i) => ({ id: p.id, orden: i + 1, antes: p.orden }))
+    .filter((p) => p.orden !== p.antes);
+
+  const resultados = await Promise.all(
+    cambios.map((p) =>
+      db.from("proyectos").update({ orden: p.orden }).eq("id", p.id)
+    )
+  );
+
+  if (resultados.some((r) => r.error)) {
+    mensaje.textContent = "No se pudo cambiar el orden.";
+    return;
+  }
+
+  cargarLista();
+}
 async function cargarLista() {
   const contenedor = document.getElementById("lista-admin");
   contenedor.replaceChildren();
@@ -45,6 +69,7 @@ async function cargarLista() {
   const { data, error } = await db
     .from("proyectos")
     .select("*")
+        .order("orden", { ascending: true })
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -53,7 +78,7 @@ async function cargarLista() {
     return;
   }
 
-  data.forEach((proyecto) => {
+    data.forEach((proyecto, posicion) => {
     const tarjeta = document.createElement("article");
     tarjeta.classList.add("tarjeta");
         if (!proyecto.visible) tarjeta.classList.add("oculta");
@@ -112,7 +137,20 @@ async function cargarLista() {
 
       cargarLista();
     });
-        acciones.append(btnEditar, btnVisible, btnBorrar);
+        const btnSubir = document.createElement("button");
+    btnSubir.textContent = "↑";
+    btnSubir.setAttribute("aria-label", "Subir");
+    btnSubir.classList.add("boton-secundario");
+    btnSubir.disabled = posicion === 0;
+    btnSubir.addEventListener("click", () => mover(data, posicion, -1));
+
+    const btnBajar = document.createElement("button");
+    btnBajar.textContent = "↓";
+    btnBajar.setAttribute("aria-label", "Bajar");
+    btnBajar.classList.add("boton-secundario");
+    btnBajar.disabled = posicion === data.length - 1;
+    btnBajar.addEventListener("click", () => mover(data, posicion, 1));
+            acciones.append(btnSubir, btnBajar, btnEditar, btnVisible, btnBorrar);
     tarjeta.append(titulo, descripcion, acciones);
     contenedor.append(tarjeta);
   });
