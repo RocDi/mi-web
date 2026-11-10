@@ -1,9 +1,14 @@
 async function iniciarConfiguracion() {
   const { data } = await db.auth.getSession();
   if (!data.session) {
-      const usuario = data.session.user;
+    location.href = "login.html";
+    return;
+  }
+
+  const usuario = data.session.user;
   const metadatos = usuario.user_metadata || {};
 
+  // Nombre
   document.getElementById("nombre").value = metadatos.nombre || "";
   document.getElementById("apellidos").value = metadatos.apellidos || "";
 
@@ -29,10 +34,37 @@ async function iniciarConfiguracion() {
     mensaje.textContent = "Nombre guardado.";
     document.getElementById("enlace-sesion").textContent = nombre;
   });
-    location.href = "login.html";
-    return;
-  }
 
+  // Correo
+  document.getElementById("correo-actual").textContent = usuario.email;
+
+  document.getElementById("form-correo").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const mensaje = document.getElementById("mensaje-correo");
+    const nuevo = document.getElementById("correo-nuevo").value.trim();
+
+    if (nuevo === usuario.email) {
+      mensaje.textContent = "Ese ya es tu correo actual.";
+      return;
+    }
+
+    const { error } = await db.auth.updateUser(
+      { email: nuevo },
+      { emailRedirectTo: new URL("login.html", location.href).href }
+    );
+
+    if (error) {
+      mensaje.textContent = "No se pudo cambiar el correo.";
+      console.error(error);
+      return;
+    }
+
+    document.getElementById("form-correo").reset();
+    mensaje.textContent =
+      "Te hemos enviado un correo para confirmar el cambio. Hasta que lo confirmes, seguirás usando el correo actual.";
+  });
+
+  // Aspecto
   const guardado = localStorage.getItem("tema") || "sistema";
 
   document.querySelectorAll('input[name="tema"]').forEach((opcion) => {
