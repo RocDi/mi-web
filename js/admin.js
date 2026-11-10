@@ -25,7 +25,19 @@ function empezarEdicion(proyecto) {
   mensaje.textContent = "";
   formulario.scrollIntoView();
 }
+function filtrarLista() {
+  const texto = document.getElementById("buscar").value.toLowerCase();
 
+  document.querySelectorAll("#lista-admin .tarjeta").forEach((tarjeta) => {
+    const titulo = tarjeta.querySelector("h3").textContent;
+    const descripcion = tarjeta.querySelector("p").textContent;
+    const contenido = (titulo + " " + descripcion).toLowerCase();
+
+    tarjeta.hidden = !contenido.includes(texto);
+  });
+    const visibles = document.querySelectorAll("#lista-admin .tarjeta:not([hidden])").length;
+  document.getElementById("sin-resultados").hidden = visibles > 0;
+}
 async function cargarLista() {
   const contenedor = document.getElementById("lista-admin");
   contenedor.replaceChildren();
@@ -78,6 +90,7 @@ async function cargarLista() {
 
       cargarLista();
     });
+      filtrarLista();
 
     acciones.append(btnEditar, btnBorrar);
     tarjeta.append(titulo, descripcion, acciones);
@@ -91,11 +104,11 @@ async function iniciarAdmin() {
     location.href = "login.html";
     return;
   }
+    document.getElementById("buscar").addEventListener("input", filtrarLista);
 
     btnCancelar.addEventListener("click", salirEdicion);
   formulario.addEventListener("submit", async (evento) => {
     evento.preventDefault();
-        console.log("submit recibido");
         btnGuardar.disabled = true;
 
     const proyecto = {
