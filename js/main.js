@@ -111,6 +111,35 @@ function ponerFavicon() {
   document.head.append(icono);
 }
 
+function mostrarAviso() {
+  if (localStorage.getItem("aviso-visto")) return;
+
+  const aviso = document.createElement("div");
+  aviso.id = "aviso";
+  aviso.setAttribute("role", "region");
+  aviso.setAttribute("aria-label", "Aviso sobre el almacenamiento en el navegador");
+
+  const texto = document.createElement("p");
+  texto.textContent =
+    "Esta web guarda en tu navegador solo lo necesario para funcionar (tu sesión y tu preferencia de aspecto). No usa publicidad ni analítica. ";
+
+  const enlace = document.createElement("a");
+  enlace.href = "privacidad.html";
+  enlace.textContent = "Más información";
+  texto.append(enlace);
+
+  const boton = document.createElement("button");
+  boton.textContent = "Entendido";
+  boton.classList.add("boton");
+  boton.addEventListener("click", () => {
+    localStorage.setItem("aviso-visto", "1");
+    aviso.remove();
+  });
+
+  aviso.append(texto, boton);
+  document.body.append(aviso);
+}
+
 async function iniciar() {
   ponerFavicon();
   await cargar("header", "componentes/header.html");
@@ -119,6 +148,7 @@ async function iniciar() {
   marcarPaginaActual();
   activarMenuMovil();
   actualizarSesion();
+    mostrarAviso();
 }
 aplicarTema();
 iniciar();
