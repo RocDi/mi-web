@@ -56,6 +56,26 @@
         <button type="submit" class="boton">Cambiar contraseña</button>
         <p id="mensaje-clave"></p>
       </form>
+            <div id="bloque-mfa" class="ajuste">
+        <h2>Verificación en dos pasos</h2>
+        <p id="estado-mfa"></p>
+        <button type="button" class="boton" id="btn-mfa-activar">Activar</button>
+
+        <div id="zona-mfa" hidden>
+          <p>1. Escanea este código con tu app de autenticación.</p>
+          <img id="qr-mfa" alt="Código QR para la app de autenticación" width="200" height="200">
+          <p>Si no puedes escanearlo, escribe esta clave en la app: <code id="clave-mfa"></code></p>
+          <form id="form-mfa-verificar">
+            <label>2. Escribe el código de 6 dígitos que muestra la app
+              <input type="text" id="codigo-mfa" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+            </label>
+            <button type="submit" class="boton">Confirmar y activar</button>
+          </form>
+        </div>
+
+        <button type="button" class="boton-peligro" id="btn-mfa-quitar" hidden>Desactivar</button>
+        <p id="mensaje-mfa"></p>
+      </div>
     </section>
   </main>
 

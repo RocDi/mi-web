@@ -23,6 +23,13 @@
         <button type="submit" class="boton">Entrar</button>
         <p id="mensaje"></p>
       </form>
+            <form id="form-codigo" hidden>
+        <label>Código de verificación (6 dígitos)
+          <input type="text" id="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required>
+        </label>
+        <button type="submit" class="boton">Verificar</button>
+        <p id="mensaje-codigo"></p>
+      </form>
             <p>¿No tienes cuenta? <a href="registro.html">Crea una</a></p>
             <p><a href="recuperar.html">¿Has olvidado tu contraseña?</a></p>
     </section>

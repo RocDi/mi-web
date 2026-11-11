@@ -103,6 +103,86 @@ async function iniciarConfiguracion() {
     document.getElementById("form-clave").reset();
     mensaje.textContent = "Contraseña cambiada.";
   });
+    // Verificación en dos pasos
+  const estadoMfa = document.getElementById("estado-mfa");
+  const mensajeMfa = document.getElementById("mensaje-mfa");
+  const btnActivar = document.getElementById("btn-mfa-activar");
+  const btnQuitar = document.getElementById("btn-mfa-quitar");
+  const zonaMfa = document.getElementById("zona-mfa");
+  let factorPendiente = null;
+
+  async function mostrarEstadoMfa() {
+    const { data, error } = await db.auth.mfa.listFactors();
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const verificado = data.totp[0];
+    estadoMfa.textContent = verificado ? "Estado: activada." : "Estado: desactivada.";
+    btnActivar.hidden = Boolean(verificado);
+    btnQuitar.hidden = !verificado;
+    btnQuitar.dataset.factor = verificado ? verificado.id : "";
+  }
+
+  btnActivar.addEventListener("click", async () => {
+    mensajeMfa.textContent = "";
+
+    const { data, error } = await db.auth.mfa.enroll({
+      factorType: "totp",
+      friendlyName: "app-" + Date.now(),
+    });
+
+    if (error) {
+      mensajeMfa.textContent = "No se pudo iniciar la activación.";
+      console.error(error);
+      return;
+    }
+
+    factorPendiente = data.id;
+    document.getElementById("qr-mfa").src = data.totp.qr_code;
+    document.getElementById("clave-mfa").textContent = data.totp.secret;
+    zonaMfa.hidden = false;
+    btnActivar.hidden = true;
+  });
+
+  document.getElementById("form-mfa-verificar").addEventListener("submit", async (evento) => {
+    evento.preventDefault();
+    const codigo = document.getElementById("codigo-mfa").value.trim();
+
+    const { error } = await db.auth.mfa.challengeAndVerify({
+      factorId: factorPendiente,
+      code: codigo,
+    });
+
+    if (error) {
+      mensajeMfa.textContent = "El código no es correcto. Prueba con el siguiente que muestre la app.";
+      console.error(error);
+      return;
+    }
+
+    zonaMfa.hidden = true;
+    document.getElementById("form-mfa-verificar").reset();
+    mensajeMfa.textContent = "Verificación en dos pasos activada.";
+    mostrarEstadoMfa();
+  });
+
+  btnQuitar.addEventListener("click", async () => {
+    if (!confirm("¿Desactivar la verificación en dos pasos?")) return;
+
+    const { error } = await db.auth.mfa.unenroll({ factorId: btnQuitar.dataset.factor });
+
+    if (error) {
+      mensajeMfa.textContent = "No se pudo desactivar. Prueba a cerrar sesión y volver a entrar con el código.";
+      console.error(error);
+      return;
+    }
+
+    mensajeMfa.textContent = "Verificación en dos pasos desactivada.";
+    mostrarEstadoMfa();
+  });
+
+  mostrarEstadoMfa();
   // Aspecto
   const guardado = localStorage.getItem("tema") || "sistema";
 
