@@ -13,6 +13,9 @@ async function iniciarConfiguracion() {
 
   const usuario = data.session.user;
   const metadatos = usuario.user_metadata || {};
+    if (usuario.id === ADMIN_ID) {
+    document.getElementById("enlace-panel").hidden = false;
+  }
 
   // Nombre
   document.getElementById("nombre").value = metadatos.nombre || "";

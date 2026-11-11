@@ -73,6 +73,11 @@ async function actualizarSesion() {
   const nombre = usuario.user_metadata?.nombre || usuario.email.split("@")[0];
     const saludo = document.getElementById("saludo");
   if (saludo) saludo.textContent = "Hola, " + nombre;
+    const botonInicio = document.getElementById("boton-inicio");
+  if (botonInicio) {
+    botonInicio.textContent = "Ver espacio personal";
+    botonInicio.href = "configuracion.html";
+  }
 
   caja.classList.add("con-sesion");
   enlace.textContent = nombre;
