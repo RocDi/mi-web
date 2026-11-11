@@ -166,14 +166,16 @@ nav a.activo {
 }
 
 @media (max-width: 800px) {
-    #menu-btn {
-        display: block;
-          .desplegable {
+  #menu-btn {
+    display: block;
+  }
+
+  .desplegable {
     position: static;
     box-shadow: none;
     margin-top: 8px;
   }
-  }
+}
 
   nav ul {
     display: none;
@@ -194,7 +196,6 @@ nav a.activo {
     section {
         padding: 50px 16px;
     }
-}
 
 form {
   display: flex;
