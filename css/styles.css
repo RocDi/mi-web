@@ -504,3 +504,41 @@ input[type="checkbox"] {
   gap: 10px;
   cursor: pointer;
 }
+
+main section:not(#inicio) > h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+main section:not(#inicio) > h1::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 4px;
+  margin-top: 12px;
+  border-radius: 2px;
+  background-color: var(--color-acento);
+}
+
+body {
+  line-height: 1.6;
+}
+
+main p {
+  line-height: 1.7;
+}
+
+a[href^="mailto:"] {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid var(--color-acento);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+a[href^="mailto:"]:hover {
+  background-color: var(--color-acento);
+  color: #fff;
+}
