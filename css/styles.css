@@ -491,8 +491,16 @@ nav .desplegable a::after {
   cursor: pointer;
 }
 
-input[type="radio"] {
+input[type="radio"],
+input[type="checkbox"] {
   padding: 0;
   width: auto;
   accent-color: var(--color-acento);
+}
+
+.casilla {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
 }

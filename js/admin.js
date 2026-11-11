@@ -34,9 +34,19 @@ async function subirImagen(archivo) {
   return { url: data.publicUrl };
 }
 
+async function borrarArchivo(url) {
+  if (!url || !url.includes("/imagenes/")) return;
+
+  const ruta = url.split("/imagenes/").pop();
+  const { error } = await db.storage.from("imagenes").remove([ruta]);
+
+  if (error) console.error(error);
+}
+
 function salirEdicion() {
   idEditando = null;
-    imagenActual = null;
+  imagenActual = null;
+  document.getElementById("etiqueta-quitar").hidden = true;
   formulario.reset();
   tituloForm.textContent = "Nuevo proyecto";
   btnGuardar.textContent = "Crear proyecto";
@@ -45,7 +55,10 @@ function salirEdicion() {
 
 function empezarEdicion(proyecto) {
   idEditando = proyecto.id;
-    imagenActual = proyecto.imagen || null;
+  imagenActual = proyecto.imagen || null;
+  document.getElementById("etiqueta-quitar").hidden = !proyecto.imagen;
+  document.getElementById("quitar-imagen").checked = false;
+  document.getElementById("imagen").value = "";
   document.getElementById("titulo").value = proyecto.titulo;
   document.getElementById("descripcion").value = proyecto.descripcion;
   document.getElementById("enlace").value = proyecto.enlace || "";
@@ -55,6 +68,7 @@ function empezarEdicion(proyecto) {
   mensaje.textContent = "";
   formulario.scrollIntoView();
 }
+
 function filtrarLista() {
   const texto = document.getElementById("buscar").value.toLowerCase();
 
@@ -65,9 +79,11 @@ function filtrarLista() {
 
     tarjeta.hidden = !contenido.includes(texto);
   });
-    const visibles = document.querySelectorAll("#lista-admin .tarjeta:not([hidden])").length;
+
+  const visibles = document.querySelectorAll("#lista-admin .tarjeta:not([hidden])").length;
   document.getElementById("sin-resultados").hidden = visibles > 0;
 }
+
 async function mover(lista, posicion, direccion) {
   const nueva = posicion + direccion;
   if (nueva < 0 || nueva >= lista.length) return;
@@ -92,6 +108,7 @@ async function mover(lista, posicion, direccion) {
 
   cargarLista();
 }
+
 async function cargarLista() {
   const contenedor = document.getElementById("lista-admin");
   contenedor.replaceChildren();
@@ -99,7 +116,7 @@ async function cargarLista() {
   const { data, error } = await db
     .from("proyectos")
     .select("*")
-        .order("orden", { ascending: true })
+    .order("orden", { ascending: true })
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -108,11 +125,12 @@ async function cargarLista() {
     return;
   }
 
-    data.forEach((proyecto, posicion) => {
+  data.forEach((proyecto, posicion) => {
     const tarjeta = document.createElement("article");
     tarjeta.classList.add("tarjeta");
-        if (!proyecto.visible) tarjeta.classList.add("oculta");
-            if (proyecto.imagen && proyecto.imagen.startsWith("https://")) {
+    if (!proyecto.visible) tarjeta.classList.add("oculta");
+
+    if (proyecto.imagen && proyecto.imagen.startsWith("https://")) {
       const imagen = document.createElement("img");
       imagen.src = proyecto.imagen;
       imagen.alt = proyecto.titulo;
@@ -121,7 +139,7 @@ async function cargarLista() {
     }
 
     const titulo = document.createElement("h3");
-        titulo.textContent = proyecto.visible
+    titulo.textContent = proyecto.visible
       ? proyecto.titulo
       : proyecto.titulo + " (oculto)";
 
@@ -139,7 +157,7 @@ async function cargarLista() {
     const btnBorrar = document.createElement("button");
     btnBorrar.textContent = "Borrar";
     btnBorrar.classList.add("boton-peligro");
-        btnBorrar.addEventListener("click", async () => {
+    btnBorrar.addEventListener("click", async () => {
       if (!confirm("¿Seguro que quieres borrar este proyecto?")) return;
 
       const { error } = await db
@@ -153,11 +171,11 @@ async function cargarLista() {
         return;
       }
 
+      await borrarArchivo(proyecto.imagen);
       cargarLista();
     });
-      filtrarLista();
 
-          const btnVisible = document.createElement("button");
+    const btnVisible = document.createElement("button");
     btnVisible.textContent = proyecto.visible ? "Ocultar" : "Mostrar";
     btnVisible.classList.add("boton-secundario");
     btnVisible.addEventListener("click", async () => {
@@ -174,7 +192,8 @@ async function cargarLista() {
 
       cargarLista();
     });
-        const btnSubir = document.createElement("button");
+
+    const btnSubir = document.createElement("button");
     btnSubir.textContent = "↑";
     btnSubir.setAttribute("aria-label", "Subir");
     btnSubir.classList.add("boton-secundario");
@@ -187,25 +206,30 @@ async function cargarLista() {
     btnBajar.classList.add("boton-secundario");
     btnBajar.disabled = posicion === data.length - 1;
     btnBajar.addEventListener("click", () => mover(data, posicion, 1));
-            acciones.append(btnSubir, btnBajar, btnEditar, btnVisible, btnBorrar);
+
+    acciones.append(btnSubir, btnBajar, btnEditar, btnVisible, btnBorrar);
     tarjeta.append(titulo, descripcion, acciones);
     contenedor.append(tarjeta);
   });
+
+  filtrarLista();
 }
 
 async function iniciarAdmin() {
   const { data } = await db.auth.getSession();
-    if (!data.session || data.session.user.id !== ADMIN_ID) {
+  if (!data.session || data.session.user.id !== ADMIN_ID) {
     location.href = "login.html";
     return;
   }
-    document.getElementById("buscar").addEventListener("input", filtrarLista);
 
-    btnCancelar.addEventListener("click", salirEdicion);
+  document.getElementById("buscar").addEventListener("input", filtrarLista);
+  btnCancelar.addEventListener("click", salirEdicion);
+
   formulario.addEventListener("submit", async (evento) => {
     evento.preventDefault();
-        btnGuardar.disabled = true;
-            const archivo = document.getElementById("imagen").files[0];
+    btnGuardar.disabled = true;
+
+    const archivo = document.getElementById("imagen").files[0];
     let imagen = imagenActual;
 
     if (archivo) {
@@ -218,14 +242,18 @@ async function iniciarAdmin() {
       imagen = resultado.url;
     }
 
+    if (document.getElementById("quitar-imagen").checked && !archivo) {
+      imagen = null;
+    }
+
     const proyecto = {
       titulo: document.getElementById("titulo").value,
       descripcion: document.getElementById("descripcion").value,
       enlace: document.getElementById("enlace").value || null,
-            imagen: imagen,
+      imagen: imagen,
     };
 
-        let error;
+    let error;
     if (idEditando) {
       ({ error } = await db
         .from("proyectos")
@@ -234,7 +262,7 @@ async function iniciarAdmin() {
     } else {
       ({ error } = await db.from("proyectos").insert(proyecto));
     }
-        btnGuardar.disabled = false;
+    btnGuardar.disabled = false;
 
     if (error) {
       mensaje.textContent = "No se pudo guardar el proyecto.";
@@ -242,7 +270,11 @@ async function iniciarAdmin() {
       return;
     }
 
-        mensaje.textContent = idEditando ? "Cambios guardados." : "Proyecto creado.";
+    if (idEditando && imagenActual && imagen !== imagenActual) {
+      await borrarArchivo(imagenActual);
+    }
+
+    mensaje.textContent = idEditando ? "Cambios guardados." : "Proyecto creado.";
     salirEdicion();
     cargarLista();
   });
