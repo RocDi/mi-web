@@ -222,6 +222,12 @@ async function iniciarAdmin() {
     return;
   }
 
+    const { data: nivel } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (nivel.currentLevel !== "aal2") {
+    location.href = nivel.nextLevel === "aal2" ? "login.html" : "configuracion.html";
+    return;
+  }
+
   document.getElementById("buscar").addEventListener("input", filtrarLista);
   btnCancelar.addEventListener("click", salirEdicion);
 
