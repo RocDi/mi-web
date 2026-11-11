@@ -24,20 +24,30 @@ function aplicarTema() {
   actualizarIconoTema();
 }
 
+
 function activarModoOscuro() {
   const boton = document.getElementById("tema");
   actualizarIconoTema();
 
-  boton.addEventListener("click", () => {
-    const oscuro = document.documentElement.getAttribute("data-tema") === "oscuro";
-    localStorage.setItem("tema", oscuro ? "claro" : "oscuro");
-    aplicarTema();
-  });
+  if (boton) {
+    boton.addEventListener("click", () => {
+      const oscuro =
+        document.documentElement.getAttribute("data-tema") === "oscuro";
 
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", aplicarTema);
+      localStorage.setItem("tema", oscuro ? "claro" : "oscuro");
+      aplicarTema();
+    });
+  }
+
+  const preferencia = window.matchMedia("(prefers-color-scheme: dark)");
+
+  preferencia.addEventListener("change", () => {
+    if ((localStorage.getItem("tema") || "sistema") === "sistema") {
+      aplicarTema();
+    }
+  });
 }
+
 
 function marcarPaginaActual() {
   const actual = location.pathname.split("/").pop() || "index.html";
@@ -51,57 +61,93 @@ function marcarPaginaActual() {
   });
 }
 
+
 function activarMenuMovil() {
   const boton = document.getElementById("menu-btn");
   const lista = document.querySelector("nav ul");
 
+  if (!boton || !lista) return;
+
+  boton.setAttribute("aria-expanded", "false");
+
   boton.addEventListener("click", () => {
-    lista.classList.toggle("abierto");
+    const abierto = lista.classList.toggle("abierto");
+    boton.setAttribute("aria-expanded", String(abierto));
   });
 }
+
+
 
 async function actualizarSesion() {
   const enlace = document.getElementById("enlace-sesion");
   const caja = document.getElementById("li-sesion");
-  const { data } = await db.auth.getSession();
 
-  if (!data.session) return;
-    const { data: nivel } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
-  if (nivel.nextLevel === "aal2" && nivel.currentLevel !== "aal2") return;
+  if (!enlace || !caja) return;
 
-  const usuario = data.session.user;
-  const nombre = usuario.user_metadata?.nombre || usuario.email.split("@")[0];
+  try {
+    const { data, error } = await db.auth.getSession();
+
+    if (error) throw error;
+    if (!data.session) return;
+
+    const usuario = data.session.user;
+    const nombre =
+      usuario.user_metadata?.nombre ||
+      usuario.email?.split("@")[0] ||
+      "Mi cuenta";
+
     const saludo = document.getElementById("saludo");
-  if (saludo) saludo.textContent = "Hola, " + nombre;
+    if (saludo) {
+      saludo.textContent = "Hola, " + nombre;
+    }
+
     const botonInicio = document.getElementById("boton-inicio");
-  if (botonInicio) {
-    botonInicio.textContent = "Ver espacio personal";
-    botonInicio.href = "configuracion.html";
+    if (botonInicio) {
+      botonInicio.textContent = "Ver espacio personal";
+      botonInicio.href = "configuracion.html";
+    }
+
+    caja.classList.add("con-sesion");
+    enlace.textContent = nombre;
+    enlace.href = "#";
+
+    const enlaceAdmin = document.getElementById("enlace-admin");
+    if (enlaceAdmin) {
+      enlaceAdmin.hidden = usuario.id !== ADMIN_ID;
+    }
+
+    enlace.addEventListener("click", (evento) => {
+      evento.preventDefault();
+      caja.classList.toggle("abierto");
+    });
+
+    document.addEventListener("click", (evento) => {
+      if (!caja.contains(evento.target)) {
+        caja.classList.remove("abierto");
+      }
+    });
+
+    const cerrarSesion = document.getElementById("cerrar-sesion");
+
+    if (cerrarSesion) {
+      cerrarSesion.addEventListener("click", async (evento) => {
+        evento.preventDefault();
+
+        const { error } = await db.auth.signOut();
+
+        if (error) {
+          console.error("No se pudo cerrar la sesión:", error);
+          return;
+        }
+
+        location.href = "index.html";
+      });
+    }
+  } catch (error) {
+    console.error("Error al comprobar la sesión:", error);
   }
-
-  caja.classList.add("con-sesion");
-  enlace.textContent = nombre;
-  enlace.href = "#";
-
-  if (usuario.id === ADMIN_ID) {
-    document.getElementById("enlace-admin").hidden = false;
-  }
-
-  enlace.addEventListener("click", (evento) => {
-    evento.preventDefault();
-    caja.classList.toggle("abierto");
-  });
-
-  document.addEventListener("click", (evento) => {
-    if (!caja.contains(evento.target)) caja.classList.remove("abierto");
-  });
-
-  document.getElementById("cerrar-sesion").addEventListener("click", async (evento) => {
-    evento.preventDefault();
-    await db.auth.signOut();
-    location.href = "index.html";
-  });
 }
+
 
 function ponerFavicon() {
   const icono = document.createElement("link");
@@ -159,17 +205,45 @@ function activarVolverArriba() {
   document.body.append(boton);
 }
 
+
+async function cargar(id, archivo) {
+  const contenedor = document.getElementById(id);
+
+  if (!contenedor) {
+    throw new Error("No se encontró el contenedor: " + id);
+  }
+
+  const respuesta = await fetch(archivo);
+
+  if (!respuesta.ok) {
+    throw new Error("No se pudo cargar " + archivo);
+  }
+
+  contenedor.innerHTML = await respuesta.text();
+}
+
+aplicarTema();
+setTimeout(() => document.documentElement.classList.add("transiciones"), 300);
+
 async function iniciar() {
   ponerFavicon();
-  await cargar("header", "componentes/header.html");
-  await cargar("footer", "componentes/footer.html");
+
+  const resultados = await Promise.allSettled([
+    cargar("header", "componentes/header.html"),
+    cargar("footer", "componentes/footer.html"),
+  ]);
+
+  resultados.forEach((resultado) => {
+    if (resultado.status === "rejected") {
+      console.error("Error al cargar un componente:", resultado.reason);
+    }
+  });
+
   activarModoOscuro();
   marcarPaginaActual();
   activarMenuMovil();
-  actualizarSesion();
+  await actualizarSesion();
   mostrarAviso();
   activarVolverArriba();
 }
-aplicarTema();
-setTimeout(() => document.documentElement.classList.add("transiciones"), 300);
-iniciar();
+iniciar.js
