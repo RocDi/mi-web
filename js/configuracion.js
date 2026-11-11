@@ -200,5 +200,19 @@ async function iniciarConfiguracion() {
     });
   });
 }
+function mostrarPanel() {
+  const paneles = document.querySelectorAll(".panel");
+  const enlaces = document.querySelectorAll(".menu-config a");
+  const pedido = location.hash.slice(1);
+  const existe = [...paneles].some((panel) => panel.id === pedido);
+  const actual = existe ? pedido : "cuenta";
 
+  paneles.forEach((panel) => panel.classList.toggle("visible", panel.id === actual));
+  enlaces.forEach((enlace) =>
+    enlace.classList.toggle("activo", enlace.getAttribute("href") === "#" + actual)
+  );
+}
+
+window.addEventListener("hashchange", mostrarPanel);
+mostrarPanel();
 iniciarConfiguracion();

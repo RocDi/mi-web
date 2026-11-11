@@ -542,3 +542,60 @@ a[href^="mailto:"]:hover {
   background-color: var(--color-acento);
   color: #fff;
 }
+
+.config {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.menu-config {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 160px;
+  position: sticky;
+  top: 90px;
+}
+
+.menu-config a {
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--color-texto);
+  text-decoration: none;
+}
+
+.menu-config a:hover {
+  background-color: var(--color-borde);
+}
+
+.menu-config a.activo {
+  background-color: var(--color-borde);
+  color: var(--color-acento);
+  font-weight: bold;
+}
+
+.paneles {
+  flex: 1;
+  min-width: 0;
+}
+
+.panel {
+  display: none;
+}
+
+.panel.visible {
+  display: block;
+}
+
+@media (max-width: 800px) {
+  .config {
+    flex-direction: column;
+  }
+
+  .menu-config {
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: static;
+  }
+}

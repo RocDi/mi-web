@@ -71,6 +71,8 @@ async function actualizarSesion() {
 
   const usuario = data.session.user;
   const nombre = usuario.user_metadata?.nombre || usuario.email.split("@")[0];
+    const saludo = document.getElementById("saludo");
+  if (saludo) saludo.textContent = "Hola, " + nombre;
 
   caja.classList.add("con-sesion");
   enlace.textContent = nombre;
