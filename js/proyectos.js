@@ -1,5 +1,6 @@
 async function mostrarProyectos() {
   const contenedor = document.getElementById("lista-proyectos");
+    contenedor.textContent = "Cargando proyectos...";
 
   const { data, error } = await db
     .from("proyectos")
@@ -12,7 +13,12 @@ async function mostrarProyectos() {
     console.error(error);
     return;
   }
+    contenedor.replaceChildren();
 
+  if (data.length === 0) {
+    contenedor.textContent = "Todavía no hay proyectos.";
+    return;
+  }
   data.forEach((proyecto) => {
     const tarjeta = document.createElement("article");
     tarjeta.classList.add("tarjeta");

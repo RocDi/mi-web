@@ -140,6 +140,25 @@ function mostrarAviso() {
   document.body.append(aviso);
 }
 
+function activarVolverArriba() {
+  const boton = document.createElement("button");
+  boton.id = "subir";
+  boton.textContent = "↑";
+  boton.setAttribute("aria-label", "Volver arriba");
+  boton.hidden = true;
+
+  boton.addEventListener("click", () => {
+    const sinAnimacion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: sinAnimacion ? "auto" : "smooth" });
+  });
+
+  window.addEventListener("scroll", () => {
+    boton.hidden = window.scrollY < 400;
+  });
+
+  document.body.append(boton);
+}
+
 async function iniciar() {
   ponerFavicon();
   await cargar("header", "componentes/header.html");
@@ -148,7 +167,9 @@ async function iniciar() {
   marcarPaginaActual();
   activarMenuMovil();
   actualizarSesion();
-    mostrarAviso();
+  mostrarAviso();
+  activarVolverArriba();
 }
 aplicarTema();
+setTimeout(() => document.documentElement.classList.add("transiciones"), 300);
 iniciar();
