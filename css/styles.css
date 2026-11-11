@@ -177,6 +177,26 @@ nav a.activo {
   }
 }
 
+@media (max-width: 800px) {
+  #menu-btn {
+    display: block;
+    nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#menu-btn {
+  display: block;
+}
+  }
+
+  .desplegable {
+    position: static;
+    box-shadow: none;
+    margin-top: 8px;
+  }
+
   nav ul {
     display: none;
     flex-direction: column;
@@ -188,6 +208,15 @@ nav a.activo {
   nav ul.abierto {
     display: flex;
   }
+
+  #li-sesion {
+    margin-left: 0;
+  }
+
+  section {
+    padding: 50px 16px;
+  }
+}
 
     #li-sesion {
     margin-left: 0;
@@ -681,4 +710,14 @@ html.transiciones textarea {
 html.transiciones .tarjeta {
   transition: background-color 0.3s, color 0.3s, border-color 0.3s,
     transform 0.2s, box-shadow 0.2s;
+}
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+nav ul {
+  margin-left: auto;
 }

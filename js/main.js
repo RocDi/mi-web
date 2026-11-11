@@ -246,4 +246,4 @@ async function iniciar() {
   mostrarAviso();
   activarVolverArriba();
 }
-iniciar.js
+iniciar();
