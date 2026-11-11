@@ -66,6 +66,8 @@ async function actualizarSesion() {
   const { data } = await db.auth.getSession();
 
   if (!data.session) return;
+    const { data: nivel } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (nivel.nextLevel === "aal2" && nivel.currentLevel !== "aal2") return;
 
   const usuario = data.session.user;
   const nombre = usuario.user_metadata?.nombre || usuario.email.split("@")[0];

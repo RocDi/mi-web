@@ -5,6 +5,12 @@ async function iniciarConfiguracion() {
     return;
   }
 
+    const { data: nivel } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (nivel.nextLevel === "aal2" && nivel.currentLevel !== "aal2") {
+    location.href = "login.html";
+    return;
+  }
+
   const usuario = data.session.user;
   const metadatos = usuario.user_metadata || {};
 
