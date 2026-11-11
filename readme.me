@@ -1,0 +1,46 @@
+# Mi web
+
+Web personal con páginas separadas, proyectos que se cargan desde una base de datos y un panel privado para gestionarlos.
+
+**Web publicada:** https://rocdi.github.io/mi-web/
+
+## Qué incluye
+
+- Páginas: Inicio, Sobre mí, Proyectos, Contacto y Privacidad.
+- Menú y pie de página compartidos, que se cargan desde `componentes/`.
+- Modo claro, oscuro o el del dispositivo.
+- Registro e inicio de sesión, recuperación de contraseña y verificación en dos pasos opcional.
+- Página de configuración: nombre, correo, contraseña y aspecto.
+- Panel de administración: crear, editar, borrar, ocultar, ordenar y buscar proyectos, con imagen.
+
+## Tecnologías
+
+HTML, CSS y JavaScript, sin frameworks. Base de datos y autenticación con Supabase. Publicada con GitHub Pages.
+
+## Estructura
+
+```
+mi-web/
+├── index.html, sobre-mi.html, proyectos.html, contacto.html, privacidad.html
+├── login.html, registro.html, recuperar.html, restablecer.html
+├── configuracion.html, admin.html
+├── componentes/   menú y pie de página
+├── css/           estilos
+└── js/            código de cada página
+```
+
+## Cómo probarla en tu ordenador
+
+1. Descarga o clona el repositorio.
+2. Abre la carpeta en Visual Studio Code con la extensión Live Server.
+3. En `js/supabase.js`, pon la URL de tu proyecto de Supabase, su clave pública y el UID de la cuenta de administración.
+4. Clic derecho sobre `index.html` → **Open with Live Server**.
+
+Hay que abrirla con Live Server y no con doble clic, porque la web carga archivos con `fetch`.
+
+## Base de datos (Supabase)
+
+- Tabla `proyectos`: `id`, `created_at`, `titulo`, `descripcion`, `enlace`, `visible`, `orden`, `imagen`.
+- Almacén público `imagenes` para las fotos de los proyectos.
+- Seguridad por filas (RLS): cualquiera puede leer los proyectos visibles; solo la cuenta de administración puede crear, editar, borrar, ver los ocultos y subir o borrar imágenes.
+- La web usa solo la clave pública de Supabase. La clave secreta no debe subirse nunca al repositorio.
